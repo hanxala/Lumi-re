@@ -182,7 +182,7 @@
     background: var(--color-surface);
     box-shadow: var(--shadow-xl);
     z-index: var(--z-modal);
-    padding: var(--spacing-2xl);
+    padding: var(--spacing-3xl) var(--spacing-xl);
 }
 
 .mobileNav {

@@ -32,13 +32,22 @@ export default function AdminLayout({
 }) {
     const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
         <div className={`${styles.layout} admin-dark`}>
             {/* Sidebar */}
             <motion.aside
-                className={styles.sidebar}
-                animate={{ width: isSidebarOpen ? 280 : 80 }}
+                className={`${styles.sidebar} ${isMobileMenuOpen ? styles.mobileOpen : ''}`}
+                animate={{
+                    width: typeof window !== 'undefined' && window.innerWidth > 1024
+                        ? (isSidebarOpen ? 280 : 80)
+                        : (isMobileMenuOpen ? 280 : 0),
+                    x: typeof window !== 'undefined' && window.innerWidth <= 1024
+                        ? (isMobileMenuOpen ? 0 : -280)
+                        : 0
+                }}
+                initial={false}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
                 <div className={styles.sidebarHeader}>
@@ -69,6 +78,7 @@ export default function AdminLayout({
                                 key={link.href}
                                 href={link.href}
                                 className={`${styles.navLink} ${isActive ? styles.active : ''}`}
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 <Icon size={22} className={styles.icon} />
                                 {isSidebarOpen && (
@@ -111,6 +121,12 @@ export default function AdminLayout({
             {/* Main Content */}
             <main className={styles.main}>
                 <header className={styles.mainHeader}>
+                    <button
+                        className={styles.mobileMenuToggle}
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        <Menu size={24} />
+                    </button>
                     <div className={styles.headerTitle}>
                         {adminLinks.find(l => l.href === pathname)?.name || 'Admin'}
                     </div>
@@ -124,6 +140,19 @@ export default function AdminLayout({
                     {children}
                 </div>
             </main>
+
+            {/* Mobile Backdrop */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        className={styles.backdrop}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

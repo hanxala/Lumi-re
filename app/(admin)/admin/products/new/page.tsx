@@ -26,7 +26,7 @@ export default function NewProduct() {
         price: '',
         salePrice: '',
         stockCount: '',
-        images: ['https://images.unsplash.com/photo-1507473888900-52e1ad14db3d?auto=format&fit=crop&q=80&w=800'], // Placeholder image
+        images: ['https://picsum.photos/seed/placeholder/800/600'], // Placeholder image
         inStock: true,
         isFeatured: false
     });

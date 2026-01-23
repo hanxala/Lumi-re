@@ -50,7 +50,7 @@ export default function AboutPage() {
                     >
                         <div className={styles.imageWrapper}>
                             <Image
-                                src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000"
+                                src="https://picsum.photos/seed/about/1200/800"
                                 alt="Our Studio"
                                 fill
                                 className={styles.image}

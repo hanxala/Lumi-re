@@ -11,9 +11,10 @@
     gap: 1.5rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
     .statsGrid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
     }
 }
 
@@ -101,6 +102,15 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 24px;
     padding: 2rem;
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+
+    .chartSection,
+    .ordersSection {
+        padding: 1.25rem;
+    }
 }
 
 .sectionHeader {
@@ -156,11 +166,71 @@
 }
 
 .orderRow {
-    display: grid;
-    grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.orderMain {
+    flex: 1;
+    min-width: 120px;
+}
+
+.orderProduct {
+    flex: 1;
+    min-width: 100px;
+}
+
+.orderStatusWrapper {
+    flex: 0 0 auto;
+}
+
+.orderAmount {
+    flex: 0 0 auto;
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    .orderRow {
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .orderProduct,
+    .orderDate {
+        display: block;
+    }
+
+    .orderMain,
+    .orderProduct {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .orderCustomer {
+        margin-left: auto;
+    }
+
+    .orderStatusWrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .orderStatusWrapper::before {
+        content: 'Status:';
+        font-size: 0.85rem;
+        color: #888;
+    }
 }
 
 .orderRow:last-child {

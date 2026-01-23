@@ -16,7 +16,7 @@ const defaultSlides = [
         title: 'Illuminate Your',
         highlight: ' Space',
         description: 'Discover our curated collection of premium lighting and home decor. Transform your living spaces with elegant designs.',
-        image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://picsum.photos/seed/lumiere1/1200/800',
         ctaLink: '/products',
         ctaText: 'Shop Now',
         color: '#D4AF37'
@@ -28,7 +28,7 @@ const defaultSlides = [
         title: 'Modern &',
         highlight: ' Minimalist',
         description: 'Get up to 30% off on our exclusive minimalist collection. Limited time offer for the season.',
-        image: 'https://images.unsplash.com/photo-1540932296774-3ed6d2d89695?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://picsum.photos/seed/lumiere2/1200/800',
         ctaLink: '/products?category=minimalist',
         ctaText: 'View Offers',
         color: '#E53935'
@@ -40,7 +40,7 @@ const defaultSlides = [
         title: 'Customer',
         highlight: ' Favorites',
         description: 'See what everyone is loving. Our best-selling chandeliers and lamps are back in stock.',
-        image: 'https://images.unsplash.com/photo-1550529126-7ad2770c0c66?auto=format&fit=crop&q=80&w=1000',
+        image: 'https://picsum.photos/seed/lumiere3/1200/800',
         ctaLink: '/products?sort=rating',
         ctaText: 'Shop Best Sellers',
         color: '#43A047'
@@ -90,7 +90,7 @@ export default function Hero() {
             <div className={styles.container}>
                 <AnimatePresence mode="wait">
                     <motion.div
-                        key={slide._id || slide.id}
+                        key={slide._id}
                         className={styles.slide}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -133,7 +133,7 @@ export default function Hero() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.6 }}
                             >
-                                <Link href={slide.ctaLink || slide.cta || '#'}>
+                                <Link href={slide.ctaLink || '#'}>
                                     <Button size="lg" icon={<ArrowRight size={20} />}>
                                         {slide.ctaText}
                                     </Button>

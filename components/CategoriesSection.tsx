@@ -11,19 +11,19 @@ const categories = [
     {
         id: 'lighting',
         name: 'Lighting',
-        image: 'https://images.unsplash.com/photo-1540932296774-3ed6d2d89695?auto=format&fit=crop&q=80&w=800',
+        image: 'https://picsum.photos/seed/cat1/800/600',
         count: 120
     },
     {
         id: 'furniture',
         name: 'Furniture',
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800',
+        image: 'https://picsum.photos/seed/cat2/800/600',
         count: 85
     },
     {
         id: 'decor',
         name: 'Home Decor',
-        image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=800',
+        image: 'https://picsum.photos/seed/cat3/800/600',
         count: 200
     }
 ];
