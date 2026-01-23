@@ -1,0 +1,179 @@
+.page {
+    padding: 2rem 0;
+    min-height: 80vh;
+}
+
+.title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 3rem;
+}
+
+.formSection {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: 0.75rem;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.fullWidth {
+    grid-column: span 2;
+}
+
+.summarySection {
+    height: fit-content;
+}
+
+.summaryCard {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 100px;
+}
+
+.itemsList {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.item {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.itemImage {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.itemInfo {
+    flex: 1;
+}
+
+.itemName {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.itemMeta {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.paymentMethods {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.paymentOption {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-primary);
+    background: rgba(212, 175, 55, 0.05);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.radio {
+    accent-color: var(--color-primary);
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.paymentLabel {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.totals {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-border);
+}
+
+@media (max-width: 968px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .summaryCard {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .fullWidth {
+        grid-column: span 1;
+    }
+}
