@@ -9,6 +9,7 @@ import { useCartStore } from '@/lib/store';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import styles from './page.module.css';
+import { toast } from 'react-hot-toast';
 
 
 export default function CheckoutPage() {
@@ -50,7 +51,7 @@ export default function CheckoutPage() {
         try {
             const orderData = {
                 items: items.map(item => ({
-                    product: item.product._id || item.product.id, // Handle both ID formats
+                    product: item.product.id,
                     quantity: item.quantity,
                     price: item.product.salePrice || item.product.price,
                     name: item.product.name,

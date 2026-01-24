@@ -18,8 +18,8 @@ export async function GET(req: Request) {
         await connectDB();
 
         const orders = await Order.find({})
-            .sort({ createdAt: -1 })
-            .populate('user', 'firstName lastName email'); // Populate user details if needed
+            .sort({ createdAt: -1 });
+        // .populate('user'); // user is string ID, cannot populate
 
         return NextResponse.json(orders);
     } catch (error) {

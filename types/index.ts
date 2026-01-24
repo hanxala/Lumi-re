@@ -15,7 +15,7 @@ export interface Product {
   features: string[];
   specifications: Specification[];
   tags: string[];
-  isNew?: boolean;
+  isNewArrival?: boolean;
   isFeatured?: boolean;
   isBestseller?: boolean;
 }

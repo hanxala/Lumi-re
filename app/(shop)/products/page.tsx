@@ -25,7 +25,7 @@ export default function ProductsPage() {
             case 'rating':
                 return b.rating - a.rating;
             case 'newest':
-                return a.isNew ? -1 : 1;
+                return a.isNewArrival ? -1 : 1;
             default:
                 return 0;
         }

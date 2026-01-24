@@ -16,7 +16,7 @@ export interface IProduct extends Document {
     tags: string[];
     isFeatured: boolean;
     isBestseller: boolean;
-    isNew: boolean;
+    isNewArrival: boolean;
     specifications: { label: string; value: string }[];
 }
 
@@ -36,7 +36,7 @@ const ProductSchema = new Schema<IProduct>({
     tags: [{ type: String }],
     isFeatured: { type: Boolean, default: false },
     isBestseller: { type: Boolean, default: false },
-    isNew: { type: Boolean, default: false },
+    isNewArrival: { type: Boolean, default: false },
     specifications: [{
         label: { type: String },
         value: { type: String }

@@ -129,7 +129,7 @@ export default function ProductDetailPage() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        {product.isNew && <span className={styles.newBadge}>New Arrival</span>}
+                        {product.isNewArrival && <span className={styles.newBadge}>New Arrival</span>}
                         <h1 className={styles.title}>{product.name}</h1>
 
                         <div className={styles.ratingAndReviews}>

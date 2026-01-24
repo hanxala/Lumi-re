@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import connectDB from '@/lib/db';
 import { Order } from '@/lib/models/Order';
-import { User } from '@/lib/models/User'; // We might need to create this if it doesn't exist, or rely on Clerk + Orders
+// import { User } from '@/lib/models/User'; // Removed as it doesn't exist
 
 export async function GET(req: Request) {
     try {

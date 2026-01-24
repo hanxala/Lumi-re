@@ -28,7 +28,8 @@ export default function NewProduct() {
         stockCount: '',
         images: ['https://picsum.photos/seed/placeholder/800/600'], // Placeholder image
         inStock: true,
-        isFeatured: false
+        isFeatured: false,
+        isNewArrival: false
     });
 
     const addFeature = () => setFeatures([...features, '']);
@@ -242,7 +243,12 @@ export default function NewProduct() {
                                 <span>Feature on Homepage</span>
                             </label>
                             <label className={styles.checkbox}>
-                                <input type="checkbox" />
+                                <input
+                                    type="checkbox"
+                                    name="isNewArrival"
+                                    checked={formData.isNewArrival}
+                                    onChange={handleChange}
+                                />
                                 <span>Mark as New Arrival</span>
                             </label>
                             <label className={styles.checkbox}>

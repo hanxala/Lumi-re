@@ -44,7 +44,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                     {/* Badges */}
                     <div className={styles.badges}>
-                        {product.isNew && <span className={styles.badge + ' ' + styles.new}>New</span>}
+                        {product.isNewArrival && <span className={styles.badge + ' ' + styles.new}>New</span>}
                         {product.isBestseller && <span className={styles.badge + ' ' + styles.bestseller}>Bestseller</span>}
                         {discount > 0 && <span className={styles.badge + ' ' + styles.sale}>-{discount}%</span>}
                     </div>

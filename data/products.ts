@@ -118,7 +118,7 @@ export const products: Product[] = [
             { label: 'Finish', value: 'Matte Black' },
         ],
         tags: ['modern', 'geometric', 'led', 'living room'],
-        isNew: true,
+        isNewArrival: true,
     },
 
     // Pendant Lights
@@ -252,7 +252,7 @@ export const products: Product[] = [
             { label: 'Finish', value: 'White, Natural' },
         ],
         tags: ['coastal', 'ceramic', 'neutral', 'bedroom'],
-        isNew: true,
+        isNewArrival: true,
     },
 
     // Floor Lamps
@@ -384,7 +384,7 @@ export const products: Product[] = [
             { label: 'Finish', value: 'Matte Black' },
         ],
         tags: ['modern', 'black', 'adjustable', 'bedroom'],
-        isNew: true,
+        isNewArrival: true,
     },
 
     // Decorative Items
@@ -473,7 +473,7 @@ export function getBestsellers(): Product[] {
 }
 
 export function getNewProducts(): Product[] {
-    return products.filter((product) => product.isNew);
+    return products.filter((product) => product.isNewArrival);
 }
 
 export function searchProducts(query: string): Product[] {

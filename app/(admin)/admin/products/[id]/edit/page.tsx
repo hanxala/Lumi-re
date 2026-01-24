@@ -168,7 +168,7 @@ export default function EditProduct() {
                                 <span>Feature on Homepage</span>
                             </label>
                             <label className={styles.checkbox}>
-                                <input type="checkbox" defaultChecked={product.isNew} />
+                                <input type="checkbox" defaultChecked={product.isNewArrival} />
                                 <span>Mark as New Arrival</span>
                             </label>
                             <label className={styles.checkbox}>

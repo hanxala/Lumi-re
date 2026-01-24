@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import connectDB from '@/lib/db';
 import { Order } from '@/lib/models/Order';
 import { Product } from '@/lib/models/Product';
-// import { User } from '@/lib/models/User'; // Assuming you have a User model or similar
+// User model is not implemented, using Clerk IDs in Order model instead
 
 export async function GET(req: Request) {
     try {
@@ -30,8 +30,8 @@ export async function GET(req: Request) {
         // 4. Recent Orders
         const recentOrders = await Order.find()
             .sort({ createdAt: -1 })
-            .limit(5)
-            .populate('user', 'firstName lastName email'); // Populate user if available
+            .limit(5);
+        // .populate('user'); // user is a string (Clerk ID), cannot populate
 
         return NextResponse.json({
             revenue: totalRevenue,
