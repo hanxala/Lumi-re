@@ -33,20 +33,53 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { name, price, description, category, images, inStock, stockCount, isFeatured } = body;
-
-        await connectDB();
-
-        const product = await Product.create({
+        const {
             name,
             price,
+            salePrice,
             description,
-            category, // Should be an object or ID depending on schema
+            category,
             images,
             inStock,
             stockCount,
             isFeatured,
-            slug: name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
+            isBestseller,
+            isNewArrival,
+            features,
+            tags,
+            specifications
+        } = body;
+
+        if (!name || !price || !category) {
+            return new NextResponse('Missing required fields', { status: 400 });
+        }
+
+        await connectDB();
+
+        // Generate robust slug
+        const slug = name
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
+        const product = await Product.create({
+            name,
+            price,
+            salePrice,
+            description,
+            categoryId: category,
+            images,
+            inStock: inStock ?? true,
+            stockCount: stockCount ?? 0,
+            isFeatured: isFeatured ?? false,
+            isBestseller: isBestseller ?? false,
+            isNewArrival: isNewArrival ?? false,
+            features: features ?? [],
+            tags: tags ?? [],
+            specifications: specifications ?? [],
+            slug,
             rating: 0,
             reviewCount: 0
         });

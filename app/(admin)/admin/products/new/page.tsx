@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { categories } from '@/data/products';
 import styles from './page.module.css';
 
@@ -19,17 +20,22 @@ export default function NewProduct() {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [features, setFeatures] = useState<string[]>(['']);
+    const [specifications, setSpecifications] = useState<{ label: string; value: string }[]>([{ label: '', value: '' }]);
+    const [tagsInput, setTagsInput] = useState('');
+    const [imagesInput, setImagesInput] = useState('https://picsum.photos/seed/placeholder/800/600');
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
-        category: 'lighting', // Default or first category
+        category: 'chandeliers', // Default to first category ID
         price: '',
         salePrice: '',
         stockCount: '',
-        images: ['https://picsum.photos/seed/placeholder/800/600'], // Placeholder image
+        sku: '',
         inStock: true,
         isFeatured: false,
-        isNewArrival: false
+        isNewArrival: false,
+        isBestseller: false
     });
 
     const addFeature = () => setFeatures([...features, '']);
@@ -38,6 +44,14 @@ export default function NewProduct() {
         const newFeatures = [...features];
         newFeatures[index] = val;
         setFeatures(newFeatures);
+    };
+
+    const addSpec = () => setSpecifications([...specifications, { label: '', value: '' }]);
+    const removeSpec = (index: number) => setSpecifications(specifications.filter((_, i) => i !== index));
+    const updateSpec = (index: number, field: 'label' | 'value', val: string) => {
+        const newSpecs = [...specifications];
+        newSpecs[index][field] = val;
+        setSpecifications(newSpecs);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -49,14 +63,24 @@ export default function NewProduct() {
     };
 
     const handleSubmit = async () => {
+        if (!formData.name || !formData.price || !formData.category) {
+            toast.error('Please fill in required fields');
+            return;
+        }
+
         setIsSubmitting(true);
+        const loadingToast = toast.loading('Publishing product...');
+
         try {
             const payload = {
                 ...formData,
                 price: parseFloat(formData.price),
                 salePrice: formData.salePrice ? parseFloat(formData.salePrice) : undefined,
-                stockCount: parseInt(formData.stockCount),
-                features: features.filter(f => f.trim() !== '')
+                stockCount: parseInt(formData.stockCount || '0'),
+                images: imagesInput.split(',').map(img => img.trim()).filter(img => img !== ''),
+                features: features.filter(f => f.trim() !== ''),
+                tags: tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== ''),
+                specifications: specifications.filter(s => s.label.trim() !== '' && s.value.trim() !== '')
             };
 
             const res = await fetch('/api/products', {
@@ -65,14 +89,44 @@ export default function NewProduct() {
                 body: JSON.stringify(payload)
             });
 
-            if (!res.ok) throw new Error('Failed to create product');
+            if (!res.ok) {
+                const errorData = await res.text();
+                throw new Error(errorData || 'Failed to create product');
+            }
 
+            toast.success('Product published successfully!', { id: loadingToast });
             router.push('/admin/products');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating product:', error);
-            alert('Failed to create product');
+            toast.error(error.message || 'Failed to create product', { id: loadingToast });
         } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const loadingToast = toast.loading('Uploading image...');
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!res.ok) throw new Error('Upload failed');
+
+            const data = await res.json();
+            const newImages = imagesInput ? `${imagesInput}, ${data.url}` : data.url;
+            setImagesInput(newImages);
+            toast.success('Image uploaded successfully!', { id: loadingToast });
+        } catch (error) {
+            console.error('Upload error:', error);
+            toast.error('Failed to upload image', { id: loadingToast });
         }
     };
 
@@ -98,7 +152,7 @@ export default function NewProduct() {
                     <div className={styles.card}>
                         <h3>Basic Information</h3>
                         <div className={styles.field}>
-                            <label>Product Name</label>
+                            <label>Product Name <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="name"
@@ -106,6 +160,7 @@ export default function NewProduct() {
                                 onChange={handleChange}
                                 placeholder="e.g. Modern Desk Lamp"
                                 className={styles.input}
+                                required
                             />
                         </div>
                         <div className={styles.field}>
@@ -121,12 +176,13 @@ export default function NewProduct() {
                         </div>
                         <div className={styles.row}>
                             <div className={styles.field}>
-                                <label>Category</label>
+                                <label>Category <span className="text-red-500">*</span></label>
                                 <select
                                     name="category"
                                     value={formData.category}
                                     onChange={handleChange}
                                     className={styles.select}
+                                    required
                                 >
                                     {categories.map(cat => (
                                         <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -135,7 +191,14 @@ export default function NewProduct() {
                             </div>
                             <div className={styles.field}>
                                 <label>SKU</label>
-                                <input type="text" placeholder="SKU-001" className={styles.input} />
+                                <input
+                                    type="text"
+                                    name="sku"
+                                    value={formData.sku}
+                                    onChange={handleChange}
+                                    placeholder="SKU-001"
+                                    className={styles.input}
+                                />
                             </div>
                         </div>
                     </div>
@@ -144,7 +207,7 @@ export default function NewProduct() {
                         <h3>Pricing & Stock</h3>
                         <div className={styles.row}>
                             <div className={styles.field}>
-                                <label>Base Price ($)</label>
+                                <label>Base Price ($) <span className="text-red-500">*</span></label>
                                 <input
                                     type="number"
                                     name="price"
@@ -152,6 +215,7 @@ export default function NewProduct() {
                                     onChange={handleChange}
                                     placeholder="0.00"
                                     className={styles.input}
+                                    required
                                 />
                             </div>
                             <div className={styles.field}>
@@ -186,6 +250,37 @@ export default function NewProduct() {
                     </div>
 
                     <div className={styles.card}>
+                        <h3>Specifications</h3>
+                        <div className={styles.featuresList}>
+                            {specifications.map((spec, index) => (
+                                <div key={index} className={styles.row} style={{ gap: '1rem', marginBottom: '0.5rem' }}>
+                                    <input
+                                        type="text"
+                                        value={spec.label}
+                                        onChange={(e) => updateSpec(index, 'label', e.target.value)}
+                                        placeholder="Label (e.g. Material)"
+                                        className={styles.input}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={spec.value}
+                                        onChange={(e) => updateSpec(index, 'value', e.target.value)}
+                                        placeholder="Value (e.g. Brass)"
+                                        className={styles.input}
+                                    />
+                                    <button onClick={() => removeSpec(index)} className={styles.removeBtn}>
+                                        <X size={18} />
+                                    </button>
+                                </div>
+                            ))}
+                            <button onClick={addSpec} className={styles.addFeatureBtn}>
+                                <Plus size={16} />
+                                Add Specification
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={styles.card}>
                         <h3>Features</h3>
                         <div className={styles.featuresList}>
                             {features.map((feature, index) => (
@@ -214,14 +309,47 @@ export default function NewProduct() {
                 <div className={styles.sidebarSection}>
                     <div className={styles.card}>
                         <h3>Product Media</h3>
-                        <div className={styles.uploadArea}>
+                        <div className={styles.uploadArea} onClick={() => document.getElementById('image-upload')?.click()}>
                             <ImageIcon size={48} className={styles.uploadIcon} />
-                            <p>Click to upload or drag and drop</p>
+                            <p>Click to upload images</p>
                             <span>PNG, JPG up to 10MB</span>
-                            <button className={styles.uploadBtn}>Upload Images</button>
+                            <input
+                                id="image-upload"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                style={{ display: 'none' }}
+                            />
                         </div>
+
+                        <div className={styles.field} style={{ marginTop: '1.5rem' }}>
+                            <label>Image URLs (comma separated)</label>
+                            <textarea
+                                value={imagesInput}
+                                onChange={(e) => setImagesInput(e.target.value)}
+                                placeholder="Paste URLs OR use upload button above"
+                                className={styles.textarea}
+                                rows={3}
+                            ></textarea>
+                        </div>
+
                         <div className={styles.mediaGallery}>
-                            {/* Placeholder for uploaded images */}
+                            {imagesInput.split(',').map((url, i) => url.trim() && (
+                                <div key={i} className={styles.mediaItem} style={{ position: 'relative' }}>
+                                    <img src={url.trim()} alt={`Preview ${i}`} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '4px' }} />
+                                    <button
+                                        className={styles.removeBtn}
+                                        style={{ position: 'absolute', top: 5, right: 5, background: 'rgba(0,0,0,0.5)', color: 'white', borderRadius: '50%', padding: '2px' }}
+                                        onClick={() => {
+                                            const urls = imagesInput.split(',').map(u => u.trim());
+                                            urls.splice(i, 1);
+                                            setImagesInput(urls.join(', '));
+                                        }}
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -229,7 +357,13 @@ export default function NewProduct() {
                         <h3>Organization</h3>
                         <div className={styles.field}>
                             <label>Tags</label>
-                            <input type="text" placeholder="modern, wood, desk, lamp" className={styles.input} />
+                            <input
+                                type="text"
+                                value={tagsInput}
+                                onChange={(e) => setTagsInput(e.target.value)}
+                                placeholder="modern, wood, desk, lamp"
+                                className={styles.input}
+                            />
                             <p className={styles.hint}>Separate tags with commas</p>
                         </div>
                         <div className={styles.checkboxGroup}>
@@ -252,7 +386,12 @@ export default function NewProduct() {
                                 <span>Mark as New Arrival</span>
                             </label>
                             <label className={styles.checkbox}>
-                                <input type="checkbox" />
+                                <input
+                                    type="checkbox"
+                                    name="isBestseller"
+                                    checked={formData.isBestseller}
+                                    onChange={handleChange}
+                                />
                                 <span>Mark as Bestseller</span>
                             </label>
                         </div>
